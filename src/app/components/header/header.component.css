@@ -1,0 +1,30 @@
+.header{
+    display: flex;
+}
+
+#header-col1{
+    width: 10%;
+}
+#header-col2{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#header-col3{
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#header-col2>h5{
+    color: orange;
+    background-color: white;
+}
+
+#header-col2>h2{
+    margin-left: 2px;
+    color: blue;
+}

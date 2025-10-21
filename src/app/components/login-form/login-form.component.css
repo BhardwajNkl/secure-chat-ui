@@ -1,0 +1,25 @@
+.content-main{
+
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login-form-container{
+    width: 30%;
+    text-align: center;
+    color: chocolate;
+    border-radius: 10%;
+}
+
+#login-form-container input {
+    width: 80%;
+    height: 20px;
+}
+
+#login-form-container button {
+    width: 80%;
+    height: 20px;
+    background-color: chocolate;
+    color: white;
+}

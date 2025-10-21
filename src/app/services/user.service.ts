@@ -10,9 +10,9 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  generateNewNumber(password: string): any{
+  register(password: string): any{
     return this.http.post(
-      `${this.baseUrl}/user/generate-new-number`,
+      `${this.baseUrl}/user/register`,
       {
         password
       }
@@ -26,6 +26,6 @@ export class UserService {
         secureChatNumber,
         password
       }
-    )
+    );
   }
 }

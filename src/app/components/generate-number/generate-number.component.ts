@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-type GenerateNumberResponse = {
-  generatedNumber: string
-}
+import {RegisterFormValidator} from '../../shared/validators/register-form.validator';
+import { RegistrationResponse } from '../../types/registration';
 
 
 @Component({
@@ -20,28 +19,35 @@ type GenerateNumberResponse = {
   styleUrl: './generate-number.component.css'
 })
 export class GenerateNumberComponent {
-  generatedNumber: string = "";
+  registrationResponse!: RegistrationResponse;
 
-  generateNumberForm = new FormGroup({
-    password: new FormControl(''),
-  });
+  registerForm: FormGroup;
 
-  constructor(private userService: UserService) {
+  constructor(private readonly userService: UserService) {
+    this.registerForm = new FormGroup({
+      password: new FormControl('', Validators.required),
+      confirmPassword: new FormControl('', Validators.required)
+    }, RegisterFormValidator.passwordMatchValidator());
   }
 
-  generateNewNumber() {
-    const password = this.generateNumberForm.value.password;
-    if (!password) {
-      alert("fill in the required field!");
+  onSubmit() {
+    console.log(this.registerForm.value);
+    if (!this.registerForm.valid) {
+      alert("Submit form correctly!");
       return;
     }
-    this.userService.generateNewNumber(password).subscribe(
-      (response: GenerateNumberResponse) => {
-        this.generatedNumber = response.generatedNumber;
+
+    this.register(this.registerForm.value.password);
+  }
+
+  register(password: string) {
+    this.userService.register(password).subscribe(
+      (response: RegistrationResponse) => {
+        this.registrationResponse = response;
       },
       (error: any) => {
         console.error(error);
-        alert("Something went wrong! Try again.again")
+        alert("Something went wrong! Try again.")
       }
     )
   }

@@ -1,0 +1,16 @@
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+
+export class RegisterFormValidator {
+    static passwordMatchValidator() {
+        return (control: AbstractControl): ValidationErrors | null => {
+            console.log("Inside validator")
+            const password = control.get('password')?.value;
+            const confirmPassword = control.get('confirmPassword')?.value;
+
+            if (password && confirmPassword && password !== confirmPassword) {
+                return { passwordMismatch: true };
+            }
+            return null;
+        };
+    }
+}

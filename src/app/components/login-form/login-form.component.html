@@ -1,13 +1,13 @@
 <div class="content-main">
-<div id="login-form-container">
-    <form>
-        Enter BConnect Number<br>
-        <input name="username" type="text"><br><br>
-        Enter Password<br>
-        <input name="password" type="password"><br><br>
-        <button type="submit" name="login-button">Login</button> <br><br>
+    <div id="login-form-container">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            Enter SecureChat Number<br>
+            <input type="text" formControlName="secureChatNumber"><br><br>
+            Enter Password<br>
+            <input type="password" formControlName="password"><br><br>
+            <button type="submit">Login</button> <br><br>
+        </form>
         OR<br>
-        <a routerLink="/generate-number">Generate BConnect Number</a>
-    </form>
-</div>
+        <a routerLink="/generate-number">Generate SecureChat Number</a>
+    </div>
 </div>

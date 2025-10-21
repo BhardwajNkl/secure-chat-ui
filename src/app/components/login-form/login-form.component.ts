@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { RouterLink } from '@angular/router';
+import { LoginResponse } from '../../types/login';
 
 @Component({
   selector: 'app-login-form',
@@ -13,23 +14,32 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent {
-  
-  loginForm = new FormGroup({
-    secureChatNumber: new FormControl(''),
-    password: new FormControl(''),
-  });
 
-   constructor(private userService: UserService) {
-    }
+  loginResponse!: LoginResponse;
 
-  login() {
-    const {secureChatNumber, password} = this.loginForm.value;
-    if (!password || !secureChatNumber) {
-      alert("fill in the required field!");
+  loginForm: FormGroup;
+
+  constructor(private readonly userService: UserService) {
+    this.loginForm = new FormGroup({
+      secureChatNumber: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
+    });
+  }
+
+  onSubmit() {
+    console.log(this.loginForm.value);
+    if (!this.loginForm.valid) {
+      alert("Submit form correctly!");
       return;
     }
+    const {secureChatNumber, password} = this.loginForm.value;
+    this.login(secureChatNumber, password);
+  }
+
+  login(secureChatNumber: string, password: string) {
     this.userService.login(secureChatNumber, password).subscribe(
-      (response: boolean) => {
+      (response: LoginResponse) => {
+        this.loginResponse = response;
         alert("Login success");
       },
       (error: any) => {

@@ -1,6 +1,7 @@
 .content-main{
     flex-grow: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -21,4 +22,9 @@
     height: 20px;
     background-color: chocolate;
     color: white;
+}
+
+#registration-success-details {
+    margin-top: 20px;
+    text-align: center;
 }

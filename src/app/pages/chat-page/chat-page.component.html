@@ -1,1 +1,37 @@
-<p>chat-page works!</p>
+<div id="wrapper">
+    <app-header></app-header>
+    <div class="content">
+        <div id="left-side">
+            <button id="add-contact-btn">
+                + Add Contact
+            </button>
+            <div id="contact-list">
+                <div *ngFor="let contact of userContacts; let i = index" class="contact"
+                    (click)="onChatSelect(contact.secureChatNumber)">
+                    <span class="contact-name">{{contact.nickName}}</span>
+                    <span class="contact-number">{{contact.secureChatNumber}}</span>
+                </div>
+            </div>
+        </div>
+        <div id="right-side">
+            <div *ngIf="!chatOpenWithContact" class="chat-header">
+                Chats will show here
+            </div>
+            <div *ngIf="chatOpenWithContact" class="chat-header">
+                Chatting with {{chatOpenWithContact.nickName}}
+            </div>
+            <div id="chat-msg-container">
+                <div *ngFor="let chat of chatsForSelectedContact; let i = index"
+                    [ngClass]="{'sent-msg': chat.type === 'SENT',
+                    'received-msg': chat.type === 'RECEIVED'}">
+                    <span>{{chat.messageContent}}</span>
+                </div>
+            </div>
+            <form id="chat-send-container">
+                <input type="text" placeholder="Enter message" id="chat-send-input">
+                <button type="submit" id="chat-send-btn">Send</button>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,32 +1,23 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Contact } from '../types/contact';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
 
-  constructor() { }
+  baseUrl: string = "http://localhost:3001";
+
+  constructor(private http: HttpClient) { }
 
   loadUserContact(loggedUserId: string) {
-    // for now, dummy implementation
-    return [
-      {
-        secureChatNumber: "nb100@securechat",
-        nickName:"nikhil"
-      },
-      {
-        secureChatNumber: "ashok100@securechat",
-        nickName:"ashok"
-      },
-      {
-        secureChatNumber: "tom100@securechat",
-        nickName:"tom"
-      }
-    ]
+    const endpoint = `${this.baseUrl}/user/${loggedUserId}/contact`;
+    return this.http.get<Array<Contact>>(endpoint);
   }
 
-  createContact(secureChatNumber: string, nickName: string) {
-    // for now, dummy implementation
-    return {secureChatNumber, nickName};
+  createContact(loggedUserId: string, secureChatNumber: string, nickName: string) {
+    const endpoint = `${this.baseUrl}/user/${loggedUserId}/contact`;
+    return this.http.post(endpoint, {contactNumber: secureChatNumber, nickName});
   }
 }

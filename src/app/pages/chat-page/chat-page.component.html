@@ -2,14 +2,25 @@
     <app-header></app-header>
     <div class="content">
         <div id="left-side">
-            <button id="add-contact-btn">
+            <button *ngIf="!showAddContactForm" id="add-contact-btn" (click)="addContactBtnClick()">
                 + Add Contact
             </button>
+            <!-- Position this form appropriately -->
+            <div *ngIf="showAddContactForm" id="add-contact-form">
+                <form [formGroup]="addContactForm">
+                    <input type="text" formControlName="secureChatNumber" placeholder="securechat number"><br>
+                    <input type="text" formControlName="nickName" placeholder="nickname"><br>
+            
+                    <button type="button" (click)="addContactSave()">Save</button>
+                    <button type="button" (click)="addContactCancel()">Cancel</button>
+                </form>
+            </div>
+
             <div id="contact-list">
                 <div *ngFor="let contact of userContacts; let i = index" class="contact"
-                    (click)="onChatSelect(contact.secureChatNumber)">
+                    (click)="onChatSelect(contact.contact.secureChatNumber)">
                     <span class="contact-name">{{contact.nickName}}</span>
-                    <span class="contact-number">{{contact.secureChatNumber}}</span>
+                    <span class="contact-number">{{contact.contact.secureChatNumber}}</span>
                 </div>
             </div>
         </div>

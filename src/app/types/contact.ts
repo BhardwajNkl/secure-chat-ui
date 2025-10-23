@@ -1,4 +1,7 @@
 export type Contact = {
-    secureChatNumber: string;
     nickName: string;
+    contact: {
+        id: string;
+        secureChatNumber: string;
+    }
 }

@@ -1,0 +1,48 @@
+<div id="wrapper">
+    <app-header></app-header>
+    <div class="content">
+        <div id="left-side">
+            <button *ngIf="!showAddContactForm" id="add-contact-btn" (click)="addContactBtnClick()">
+                + Add Contact
+            </button>
+            <!-- Position this form appropriately -->
+            <div *ngIf="showAddContactForm" id="add-contact-form">
+                <form [formGroup]="addContactForm">
+                    <input type="text" formControlName="secureChatNumber" placeholder="securechat number"><br>
+                    <input type="text" formControlName="nickName" placeholder="nickname"><br>
+            
+                    <button type="button" (click)="addContactSave()">Save</button>
+                    <button type="button" (click)="addContactCancel()">Cancel</button>
+                </form>
+            </div>
+
+            <div id="contact-list">
+                <div *ngFor="let contact of userContacts; let i = index" class="contact"
+                    (click)="onChatSelect(contact.contact.secureChatNumber)">
+                    <span class="contact-name">{{contact.nickName}}</span>
+                    <span class="contact-number">{{contact.contact.secureChatNumber}}</span>
+                </div>
+            </div>
+        </div>
+        <div id="right-side">
+            <div *ngIf="!chatOpenWithContact" class="chat-header">
+                Chats will show here
+            </div>
+            <div *ngIf="chatOpenWithContact" class="chat-header">
+                Chatting with {{chatOpenWithContact.nickName}}
+            </div>
+            <div id="chat-msg-container">
+                <div *ngFor="let chat of chatsForSelectedContact; let i = index"
+                    [ngClass]="{'sent-msg': chat.type === 'SENT',
+                    'received-msg': chat.type === 'RECEIVED'}">
+                    <span>{{chat.messageContent}}</span>
+                </div>
+            </div>
+            <form id="chat-send-container">
+                <input type="text" placeholder="Enter message" id="chat-send-input">
+                <button type="submit" id="chat-send-btn">Send</button>
+            </form>
+        </div>
+
+    </div>
+</div>

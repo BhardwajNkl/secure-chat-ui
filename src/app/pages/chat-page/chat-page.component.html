@@ -26,10 +26,10 @@
         </div>
         <div id="right-side">
             <div *ngIf="!chatOpenWithContact" class="chat-header">
-                Chats will show here
+                Select any contact and chat
             </div>
             <div *ngIf="chatOpenWithContact" class="chat-header">
-                Chatting with {{chatOpenWithContact.nickName}}
+                Chatting with {{chatOpenWithContact.nickName}} | {{chatOpenWithContact.contact.secureChatNumber}}
             </div>
             <div id="chat-msg-container">
                 <div *ngFor="let chat of chatsForSelectedContact; let i = index"
@@ -38,8 +38,8 @@
                     <span>{{chat.messageContent}}</span>
                 </div>
             </div>
-            <form id="chat-send-container">
-                <input type="text" placeholder="Enter message" id="chat-send-input">
+            <form [formGroup]="chatMessageForm" (ngSubmit)="sendChat()" id="chat-send-container">
+                <input formControlName="messageContent" type="text" placeholder="Enter message" id="chat-send-input">
                 <button type="submit" id="chat-send-btn">Send</button>
             </form>
         </div>

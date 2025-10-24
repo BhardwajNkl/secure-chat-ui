@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Contact } from '../types/contact';
+import { Contact, ContactAddResponse } from '../types/contact';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,6 @@ export class ContactService {
 
   createContact(loggedUserId: string, secureChatNumber: string, nickName: string) {
     const endpoint = `${this.baseUrl}/user/${loggedUserId}/contact`;
-    return this.http.post(endpoint, {contactNumber: secureChatNumber, nickName});
+    return this.http.post<ContactAddResponse>(endpoint, {contactNumber: secureChatNumber, nickName});
   }
 }

@@ -1,8 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoginResponse } from '../../types/login';
+import { GlobalStateService } from '../../shared/global-state.service';
 
 @Component({
   selector: 'app-login-form',
@@ -14,12 +15,13 @@ import { LoginResponse } from '../../types/login';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent {
-
-  loginResponse!: LoginResponse;
-
   loginForm: FormGroup;
 
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private router: Router,
+    private readonly globalState: GlobalStateService
+  ) {
     this.loginForm = new FormGroup({
       secureChatNumber: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required)
@@ -33,14 +35,12 @@ export class LoginFormComponent {
       return;
     }
     const {secureChatNumber, password} = this.loginForm.value;
-    this.login(secureChatNumber, password);
-  }
-
-  login(secureChatNumber: string, password: string) {
-    this.userService.login(secureChatNumber, password).subscribe(
+     this.userService.login(secureChatNumber, password).subscribe(
       (response: LoginResponse) => {
-        this.loginResponse = response;
-        alert("Login success");
+        // set state
+        this.globalState.setLogin(response);
+        // navigate to chat page
+        this.router.navigate(['/chat']);
       },
       (error: any) => {
         console.error(error);

@@ -31,7 +31,6 @@ export class GenerateNumberComponent {
   }
 
   onSubmit() {
-    console.log(this.registerForm.value);
     if (!this.registerForm.valid) {
       alert("Submit form correctly!");
       return;

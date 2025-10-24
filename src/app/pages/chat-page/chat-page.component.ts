@@ -4,10 +4,10 @@ import { Contact, ContactAddResponse } from '../../types/contact';
 import { ContactService } from '../../services/contact.service';
 import { CommonModule } from '@angular/common';
 import { Chat, ChatType } from '../../types/chat';
-import { ChatService } from '../../services/chat.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GlobalStateService } from '../../shared/global-state.service';
 import { LoginResponse } from '../../types/login';
+import { EventService } from '../../services/event.service';
 
 @Component({
   selector: 'app-chat-page',
@@ -33,7 +33,8 @@ export class ChatPageComponent {
 
   constructor(
     private readonly contactService: ContactService,
-    private readonly globalState: GlobalStateService
+    private readonly globalState: GlobalStateService,
+    private readonly eventService: EventService
   ) {
     this.addContactForm = new FormGroup({
       secureChatNumber: new FormControl('', Validators.required),
@@ -49,14 +50,12 @@ export class ChatPageComponent {
     // Subscribe to login state
     this.globalState.loginState$.subscribe(
       data => {
-        console.log("login state change = ", data);
         this.loginDetails = data;
       }
     )
     // Subscribe to the contacts state
     this.globalState.contactState$.subscribe(
       data => {
-        console.log("contacts state change = ", data);
         this.userContacts = data;
       }
     );
@@ -67,12 +66,16 @@ export class ChatPageComponent {
     // but, for now, let's keep this impl.
     this.globalState.chatMap$.subscribe(
       data => {
-        console.log("old value in compo = ", this.chatsForSelectedContact);
-        console.log("chats state change = ", data);
         if (this.chatOpenWithContact) {
           this.chatsForSelectedContact = this.globalState.loadMessagesForContact(this.chatOpenWithContact.contact.id);
         }
-        console.log("new value in compo = ", this.chatsForSelectedContact);
+      }
+    );
+
+    // subscribe to 
+    this.eventService.getMessages().subscribe(
+      (message) => {
+        this.globalState.updateChatState(message.senderId, message.messageContent, ChatType.RECEIVED);
       }
     );
 
@@ -135,11 +138,15 @@ export class ChatPageComponent {
 
   sendChat() {
     if (!this.chatMessageForm.valid) {
-      console.log("Can't send empty message!");
       return;
     }
     const { messageContent } = this.chatMessageForm.value;
     this.chatMessageForm.reset();
+    this.eventService.sendMessage({
+        senderId: this.loginDetails!.loggedUser.id,
+        receiverId: this.chatOpenWithContact!.contact.id,
+        messageContent: messageContent
+      });
     this.globalState.updateChatState(this.chatOpenWithContact!.contact.id, messageContent, ChatType.SENT);
   }
 }

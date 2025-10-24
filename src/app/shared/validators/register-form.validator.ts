@@ -3,7 +3,6 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 export class RegisterFormValidator {
     static passwordMatchValidator() {
         return (control: AbstractControl): ValidationErrors | null => {
-            console.log("Inside validator")
             const password = control.get('password')?.value;
             const confirmPassword = control.get('confirmPassword')?.value;
 
